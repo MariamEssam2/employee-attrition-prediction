@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Attrition Prediction</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 40px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input {
+            padding: 5px;
+            margin-top: 5px;
+            width: 200px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Employee Attrition Prediction</h2>
+    <form id="attritionForm">
+        <label>Age:</label>
+        <input type="number" name="Age" required>
+
+        <label>Job Level:</label>
+        <input type="number" name="Job_Level" required>
+
+        <label>Monthly Income:</label>
+        <input type="number" name="Monthly_Income" required>
+
+        <label>Hourly Rate:</label>
+        <input type="number" name="Hourly_Rate" required>
+
+        <label>Years at Company:</label>
+        <input type="number" name="Years_at_Company" required>
+
+        <label>Years in Current Role:</label>
+        <input type="number" name="Years_in_Current_Role" required>
+
+        <label>Years Since Last Promotion:</label>
+        <input type="number" name="Years_Since_Last_Promotion" required>
+
+        <label>Work Life Balance:</label>
+        <input type="number" name="Work_Life_Balance" required>
+
+        <label>Job Satisfaction:</label>
+        <input type="number" name="Job_Satisfaction" required>
+
+        <label>Performance Rating:</label>
+        <input type="number" name="Performance_Rating" required>
+
+        <label>Training Hours Last Year:</label>
+        <input type="number" name="Training_Hours_Last_Year" required>
+
+        <label>Project Count:</label>
+        <input type="number" name="Project_Count" required>
+
+        <label>Average Hours Worked Per Week:</label>
+        <input type="number" name="Average_Hours_Worked_Per_Week" required>
+
+        <label>Absenteeism:</label>
+        <input type="number" name="Absenteeism" required>
+
+        <label>Work Environment Satisfaction:</label>
+        <input type="number" name="Work_Environment_Satisfaction" required>
+
+        <label>Relationship with Manager:</label>
+        <input type="number" name="Relationship_with_Manager" required>
+
+        <label>Job Involvement:</label>
+        <input type="number" name="Job_Involvement" required>
+
+        <label>Distance From Home:</label>
+        <input type="number" name="Distance_From_Home" required>
+
+        <label>Number of Companies Worked:</label>
+        <input type="number" name="Number_of_Companies_Worked" required>
+
+        <label>Attrition Yes (1/0):</label>
+        <input type="number" name="Attrition_Yes" required>
+
+        <label>Gender Male (1/0):</label>
+        <input type="number" name="Gender_Male" required>
+
+        <label>Marital Status Married (1/0):</label>
+        <input type="number" name="Marital_Status_Married" required>
+
+        <label>Marital Status Single (1/0):</label>
+        <input type="number" name="Marital_Status_Single" required>
+
+        <label>Department HR (1/0):</label>
+        <input type="number" name="Department_HR" required>
+
+        <label>Department IT (1/0):</label>
+        <input type="number" name="Department_IT" required>
+
+        <label>Department Sales (1/0):</label>
+        <input type="number" name="Department_Sales" required>
+
+        <label>Job Role Assistant (1/0):</label>
+        <input type="number" name="Job_Role_Assistant" required>
+
+        <label>Job Role Executive (1/0):</label>
+        <input type="number" name="Job_Role_Executive" required>
+
+        <label>Job Role Manager (1/0):</label>
+        <input type="number" name="Job_Role_Manager" required>
+
+        <label>Overtime Yes (1/0):</label>
+        <input type="number" name="Overtime_Yes" required>
+
+        <button type="button" onclick="sendPrediction()">Predict</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        async function sendPrediction() {
+            const form = document.getElementById('attritionForm');
+            const formData = new FormData(form);
+            const jsonData = {};
+            formData.forEach((value, key) => {
+                jsonData[key] = parseInt(value);
+            });
+
+            const res = await fetch("http://127.0.0.1:8000/predict", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(jsonData)
+            });
+
+            const result = await res.json();
+            document.getElementById("result").innerHTML = `
+                Prediction: <strong>${result.Attrition_Prediction}</strong><br>
+                Probability: <strong>${(result.Probability * 100).toFixed(2)}%</strong>`;
+        }
+    </script>
+</body>
+</html>
